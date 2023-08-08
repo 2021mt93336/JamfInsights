@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Micron</title>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #0090da;
+    }
+    #app-select {
+      width: 220px;
+      height: 40px;
+      border-radius: 20px;
+      padding: 10px;
+      border: 2px solid white;
+      outline: none;
+      color: white;
+    }
+    option {
+      font-weight: bold;
+      color: white;
+    }
+    .header {
+      position: relative;
+    }
+
+
+    .heading {
+      text-align: center;
+      font-weight: 500;
+      font-size: 32px;
+      color: white;
+      margin-bottom: 100px;
+    }
+
+    img {
+      height: 100px;
+      background-color: #0090da;
+      border-radius: 10px;
+      /* background: #0090da;
+      height: 50px;
+      width: 120px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin-left: 30px; */
+    }
+  </style>
+  <body>
+    <!-- <div
+      class="header1"
+      style="width: 100%; height: 80px; background-color: #0090da"
+    > -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+      "
+    >
+      <div style="flex: 0.5;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+        <img
+          src="https://www.micron.com/micron/images/megamenu/Micron-logo_white.svg"
+        />
+        <div class="heading">JAMF Insights</div>
+      </div>
+      <div style="flex: 0.5; color: white; border-radius: 5px">
+        <label for="" style="font-size: 24px; font-weight: 700"
+          >SELECT APPNAME:&nbsp;</label
+        >
+        <select name="" id="app-select" onchange="handleChange()">
+          <option value="">----</option>
+          <option value="Cisco AnyConnect Secure Mobility Client.app">Cisco Anyconnect VPN</option>
+          <option value="DGCIApp.app">Digital Guardian</option>
+          <option value="Microsoft Word.app">Microsoft Word</option>
+          <option value="Microsoft Excel.app">Microsoft Excel</option>
+          <option value="Microsoft Powerpoint.app">Microsoft PowerPoint</option>
+          <option value="Microsoft OneNote.app">Microsoft OneNote</option>
+          <option value="Microsoft Outlook.app">Microsoft Outlook</option>
+          <option value="Onedrive.app">Onedrive</option>
+          <option value="SentinelOne Extensions.app">SentinelOne</option>
+          <option value="zoom.us.app">Zoom</option>
+            Cisco Anyconnect VPN
+          </option>
+        </select>
+      </div>
+    </div>
+  </body>
+  <script>
+    function handleChange() {
+      const appname = document.getElementById("app-select").value;
+      window.location.href = `https://jamfinsights.azurewebsites.net/app/${appname}`;
+    }
+  </script>
+</html>

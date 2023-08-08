@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <!-- Datatables  -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"
+    ></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script> -->
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.js"
+      integrity="sha512-CAv0l04Voko2LIdaPmkvGjH3jLsH+pmTXKFoyh5TIimAME93KjejeP9j7wSeSRXqXForv73KUZGJMn8/P98Ifg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script> -->
+    <!-- Resources -->
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/kelly.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="//cdn.amcharts.com/lib/4/plugins/sliceGrouper.js"></script>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+    * {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #chartdiv1,
+    #chartdiv2 {
+      width: 100%;
+      height: 500px;
+    }
+    body {
+      overflow-x: hidden;
+    }
+    .container {
+      /* border: 2px solid #000; */
+      /* height: 100vh; */
+      /* width: 100vw; */
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .graph {
+      text-align: center;
+      height: 90vh;
+      min-width: 500px;
+      flex: 1;
+    }
+
+    .search {
+      height: 90vh;
+      padding: 20px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      flex-direction: column;
+      flex: 1;
+      min-width: 600px;
+      /* border: 2px solid red; */
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+      cursor: grabbing;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #cecece;
+      border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    tr {
+      padding: 10px 20px;
+    }
+
+    td {
+      font-weight: 600;
+      letter-spacing: 1.5px;
+    }
+    .heading {
+      text-align: center;
+      font-weight: 500;
+      font-size: 24px;
+      color: white;
+      margin-top: 6px;
+    }
+
+    img {
+      background: #0090da;
+      height: 45px;
+      width: 120px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin-left: 30px;
+    }
+
+    #app-select {
+      width: 220px;
+      height: 40px;
+      border-radius: 20px;
+      padding: 10px;
+      border: 2px solid #0090da;
+      outline: none;
+    }
+    option {
+      font-weight: bold;
+    }
+
+    table.dataTable tr.odd {
+      background-color: #ebd472 !important;
+    }
+    table.dataTable tr.even {
+      /* background-color: #d6f1ff !important; */
+      background-color: #fff !important;
+    }
+
+    table.dataTable tr.odd .sorting_1 {
+      background-color: #ebd472 !important;
+    }
+    table.dataTable tr.even .sorting_1 {
+      background-color: #fff !important;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div
+        class="header"
+        style="
+          width: 100%;
+          height: 50px;
+          background-color: #0090da;
+          position: sticky;
+        "
+      >
+        <div class="heading">Mac Insights</div>
+        <img
+          src="https://www.micron.com/micron/images/megamenu/Micron-logo_white.svg"
+        />
+      </div>
+      <div style="width: 100vw">
+        <center style="margin-top: 15px">
+          <a href="https://jamfinsights.azurewebsites.net">Home Page</a>
+          <h2>App Name:&nbsp;{{ title }}</h2>
+          <select name="" id="app-select" onchange="handleChange()">
+            <option value="">----</option>
+            <option value="PrivilegeManagement.app">Avecto Privilege Management</option>
+            <option value="Cisco AnyConnect Secure Mobility Client.app">Cisco Anyconnect VPN</option>
+            <option value="Citrix Workspace.app">Citrix Workspace</option>
+            <option value="DGCIApp.app">Digital Guardian</option>
+            <option value="Google Chrome.app">Google Chrome</option>
+            <option value="Microsoft Word.app">Microsoft Word</option>
+            <option value="Microsoft Excel.app">Microsoft Excel</option>
+            <option value="Microsoft Powerpoint.app">Microsoft PowerPoint</option>
+            <option value="Microsoft OneNote.app">Microsoft OneNote</option>
+            <option value="Microsoft Outlook.app">Microsoft Outlook</option>
+            <option value="Onedrive.app">Onedrive</option>
+            <option value="Safari.app">Safari</option>
+            <option value="SentinelOne Extensions.app">SentinelOne</option>
+            <option value="zoom.us.app">Zoom</option>
+          </select>
+        </center>
+        <script>
+          function handleChange() {
+            const appname = document.getElementById("app-select").value;
+            console.log(appname);
+            window.location.href = `https://jamfinsights.azurewebsites.net/app/${appname}`;
+          }
+        </script>
+      </div>
+      <div class="graph">
+        <center>
+          <h2>Machines using this app:{{ totalUsers }}</h2>
+          <h4>Total Versions:{{values|length}}</h4>
+          <div id="chartdiv1"></div>
+        </center>
+      </div>
+      <div class="search" id="search1">
+        <div
+          id="table-container1"
+          style="visibility: hidden; width: 600px"
+          class="table-container"
+        >
+          <table id="example" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>Computer ID</th>
+                <th>Name</th>
+                <th>{{ title }} version</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in users %}
+
+              <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.version }}</td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="graph">
+        <center>
+          <h1>VIP Users</h1>
+          <h2>Machines using this app:{{vipusers|length}}</h2>
+        </center>
+        <div id="chartdiv2"></div>
+      </div>
+      <div class="search">
+        <div
+          id="table-container2"
+          style="visibility: hidden; width: 600px"
+          class="table-container"
+        >
+          <table id="example2" style="max-height: 500px">
+            <thead>
+              <tr>
+                <th>Computer Id</th>
+                <th>Name</th>
+                <th>{{ title }} version</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for vip in vipusers %}
+
+              <tr>
+                <td>{{ vip.id }}</td>
+                <td>{{ vip.name }}</td>
+                <td>{{ vip.version }}</td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    am4core.ready(function() {
+    // Themes begin
+    am4core.useTheme(am4themes_kelly);
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+    var chart = am4core.create("chartdiv1", am4charts.PieChart3D);
+    // chart.radius = am4core.percent(50);
+    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+    // chart.responsive.enabled = true;
+    chart.padding(20,20,20,20)
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "bottom";
+    chart.legend.maxHeight = 150;
+    chart.legend.maxWidth = 100;
+    chart.legend.scrollable = true;
+    // chart.angle = 60
+    // {% for item in values %}
+    //                     "{{ item.users_count }}",
+    //                   {% endfor %}
+    chart.data = [
+      // {
+      //   country: "Lithuania",
+      //   litres: 501.9
+      // },
+      {% for item in values %}
+        {
+        version:"{{item.version}}",
+        count:{{ item.users_count }},
+        },
+      {% endfor %}
+    ];
+
+    var series = chart.series.push(new am4charts.PieSeries3D());
+    series.dataFields.value = "count";
+    series.dataFields.category = "version";
+    series.labels.template.disabled = false;
+    series.ticks.template.disabled = false;
+    series.labels.template.paddingTop = 0;
+    series.labels.template.paddingBottom = 0;
+    // series.labels.template.fontSize = 12;
+    series.labels.template.wrap = true;
+
+    //Handling Too many slices
+    var grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
+    grouper.threshold = 2;
+    grouper.groupName = "Other Versions";
+    grouper.clickBehavior = "zoom";
+    //Animations
+    series.slices.template.showOnInit = true;
+    series.slices.template.hiddenState.properties.shiftRadius = 2;
+    // series.hiddenState.properties.endAngle = -90;
+    // chart.hiddenState.properties.radius = am4core.percent(0);
+
+
+    // ------------------------------
+    // vip
+    var vipchart = am4core.create("chartdiv2", am4charts.PieChart3D);
+    vipchart.hiddenState.properties.opacity = 0.2; // this creates initial fade-in
+    vipchart.responsive.enabled = true;
+    vipchart.padding(20,20,20,20)
+
+    vipchart.legend = new am4charts.Legend();
+    vipchart.legend.position = "bottom";
+    vipchart.legend.scrollable = true;
+    // {% for item in values %}
+    //                     "{{ item.users_count }}",
+    //                   {% endfor %}
+    vipchart.data = [
+      // {
+        //   country: "Lithuania",
+        //   litres: 501.9
+        // },
+        {% for item in vipdata %}
+        {
+          version:"{{item.version}}",
+          count:{{ item.users_count }},
+        },
+        {% endfor %}
+      ];
+
+      var series = vipchart.series.push(new am4charts.PieSeries3D());
+      series.dataFields.value = "count";
+      series.dataFields.category = "version";
+      series.labels.template.disabled = false;
+      series.ticks.template.disabled = false;
+
+      var grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
+      grouper.threshold = 2;
+      grouper.groupName = "Other Versions";
+      grouper.clickBehavior = "zoom";
+
+    }); // end am4core.ready()
+  </script>
+  <script>
+    window.onload = function () {
+      document.getElementById("table-container1").style.visibility = "";
+      document.getElementById("table-container2").style.visibility = "";
+    };
+    let table1 = new DataTable("#example", {
+      // options
+      autowidth: "true",
+      scrollY: 500,
+      paging: false,
+      bInfo: false,
+    });
+    let table2 = new DataTable("#example2", {
+      // options
+      autowidth: "true",
+      scrollY: 500,
+      paging: false,
+      bInfo: false,
+    });
+  </script>
+</html>
